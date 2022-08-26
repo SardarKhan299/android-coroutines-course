@@ -3,6 +3,7 @@ package com.techyourchance.coroutines.solutions.exercise2
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.EditText
@@ -65,12 +66,14 @@ class Exercise2SolutionFragment : BaseFragment() {
         super.onStop()
         job?.cancel()
         btnGetReputation.isEnabled = true
+        Log.d(Exercise2SolutionFragment::class.simpleName, "onStop: ")
     }
 
     private suspend fun getReputationForUser(userId: String): Int {
         return withContext(Dispatchers.Default) {
             logThreadInfo("getReputationForUser()")
             getReputationEndpoint.getReputation(userId)
+            Log.d(Exercise2SolutionFragment::class.simpleName, "getReputationForUser: ")
         }
     }
 

@@ -1,6 +1,7 @@
 package com.techyourchance.coroutines.demonstrations.concurrentcoroutines
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,6 +48,7 @@ class ConcurrentCoroutinesDemoFragment : BaseFragment() {
                 Toast.makeText(requireContext(), "$iterationsCount", Toast.LENGTH_SHORT).show()
                 btnStart.isEnabled = true
             }
+            Log.d(ConcurrentCoroutinesDemoFragment::class.simpleName, "onCreateView: ")
         }
 
         return view

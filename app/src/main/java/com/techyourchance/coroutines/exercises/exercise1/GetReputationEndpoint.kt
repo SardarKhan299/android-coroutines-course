@@ -5,7 +5,7 @@ import kotlin.random.Random
 
 class GetReputationEndpoint {
     fun getReputation(userId: String): Int {
-        ThreadInfoLogger.logThreadInfo("GetReputationEndpoint#getReputation(): called")
+        ThreadInfoLogger.logThreadInfo("GetReputationEndpoint#getReputation(): called $userId")
         Thread.sleep(3000)
         ThreadInfoLogger.logThreadInfo("GetReputationEndpoint#getReputation(): return data")
         return Random.nextInt(0, 100)

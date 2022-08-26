@@ -3,6 +3,7 @@ package com.techyourchance.coroutines.exercises.exercise2
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.EditText
@@ -13,10 +14,7 @@ import com.techyourchance.coroutines.common.BaseFragment
 import com.techyourchance.coroutines.common.ThreadInfoLogger
 import com.techyourchance.coroutines.exercises.exercise1.GetReputationEndpoint
 import com.techyourchance.coroutines.home.ScreenReachableFromHome
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class Exercise2Fragment : BaseFragment() {
 
@@ -27,11 +25,13 @@ class Exercise2Fragment : BaseFragment() {
     private lateinit var edtUserId: EditText
     private lateinit var btnGetReputation: Button
 
+    private var job:Job? = null
     private lateinit var getReputationEndpoint: GetReputationEndpoint
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getReputationEndpoint = compositionRoot.getReputationEndpoint
+        Log.d(Exercise2Fragment::class.simpleName, "onCreate: ")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -51,7 +51,7 @@ class Exercise2Fragment : BaseFragment() {
         btnGetReputation = view.findViewById(R.id.btn_get_reputation)
         btnGetReputation.setOnClickListener {
             logThreadInfo("button callback")
-            coroutineScope.launch {
+            job = coroutineScope.launch {
                 btnGetReputation.isEnabled = false
                 val reputation = getReputationForUser(edtUserId.text.toString())
                 Toast.makeText(requireContext(), "reputation: $reputation", Toast.LENGTH_SHORT).show()
@@ -60,6 +60,13 @@ class Exercise2Fragment : BaseFragment() {
         }
 
         return view
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(Exercise2Fragment::class.simpleName, "onStop: ")
+        job?.cancel()
+        btnGetReputation.isEnabled = true
     }
 
     private suspend fun getReputationForUser(userId: String): Int {
